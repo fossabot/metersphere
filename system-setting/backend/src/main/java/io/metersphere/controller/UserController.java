@@ -15,6 +15,7 @@ import io.metersphere.dto.UserGroupPermissionDTO;
 import io.metersphere.excel.domain.ExcelResponse;
 import io.metersphere.i18n.Translator;
 import io.metersphere.log.annotation.MsAuditLog;
+import io.metersphere.log.annotation.MsRequestLog;
 import io.metersphere.request.member.*;
 import io.metersphere.request.resourcepool.UserBatchProcessRequest;
 import io.metersphere.service.BaseCheckPermissionService;
@@ -164,7 +165,7 @@ public class UserController {
 
     @PostMapping("/project/member/add")
     @RequiresPermissions(value = {PermissionConstants.PROJECT_USER_READ_CREATE, PermissionConstants.WORKSPACE_PROJECT_MANAGER_READ_ADD_USER}, logical = Logical.OR)
-
+    @MsRequestLog(module = OperLogModule.PROJECT_PROJECT_MEMBER)
     public void addProjectMember(@RequestBody AddMemberRequest request) {
         userService.addProjectMember(request);
     }
@@ -184,7 +185,7 @@ public class UserController {
     }
 
     @GetMapping("/project/member/delete/{projectId}/{userId}")
-//    @MsAuditLog(module = "workspace_member", type = OperLogConstants.DELETE, title = "删除工作空间成员")
+    @MsRequestLog(module = OperLogModule.PROJECT_PROJECT_MEMBER)
     public void deleteProjectMember(@PathVariable String projectId, @PathVariable String userId) {
         String currentUserId = SessionUtils.getUser().getId();
         if (StringUtils.equals(userId, currentUserId)) {
